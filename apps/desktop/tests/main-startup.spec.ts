@@ -415,6 +415,7 @@ beforeEach(() => {
   vi.spyOn(console, 'error').mockImplementation(() => {})
   vi.spyOn(console, 'info').mockImplementation(() => {})
   vi.spyOn(console, 'warn').mockImplementation(() => {})
+  vi.stubEnv('DSH_HOME', undefined)
   vi.stubEnv('DSH_DESKTOP_PNPM_ENTRY', 'test-pnpm')
   vi.stubEnv('DSH_DESKTOP_DSH_DIR', 'test-runtime')
   vi.stubEnv('DSH_DESKTOP_PRIMARY_RUNTIME_DIR', 'test-primary-runtime')
@@ -837,10 +838,19 @@ describe('desktop main startup', () => {
         { role: 'toggleDevTools', visible: false, accelerator: 'F12' },
       ])
     } else {
+      expect(process.env.DSH_HOME).toBe(join('desktop-test-home', '.dsh-linux'))
       expect(window.options).not.toHaveProperty('titleBarStyle')
       expect(window.options).not.toHaveProperty('vibrancy')
     }
     expect(harness.hosts).toHaveLength(0)
+  })
+
+  it('honors an explicit Linux data directory', async () => {
+    vi.spyOn(process, 'platform', 'get').mockReturnValue('linux')
+    vi.stubEnv('DSH_HOME', '/custom/dsh-data')
+    await import('../src/main.ts')
+    await harness.preparing.promise
+    expect(process.env.DSH_HOME).toBe('/custom/dsh-data')
   })
 
   it('serves packaged shell documents instead of rejecting the shell origin', async () => {
