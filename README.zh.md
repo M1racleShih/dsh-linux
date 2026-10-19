@@ -1,6 +1,12 @@
-# DeepSeek Harness
+# DSH Linux
 
 [English](README.md) | 中文
+
+DSH Linux 是 DeepSeek Harness 的社区 Linux 桌面分支，首个验证目标为 KDE Plasma。本项目不是 DeepSeek 官方发行版。
+
+[Linux 开发与验证](apps/desktop/linux/README.zh.md)
+
+## 上游项目
 
 DeepSeek Harness（`dsh`）是由 [DeepSeek AI](https://deepseek.com) 开发的开源 agent harness（智能体框架）。
 

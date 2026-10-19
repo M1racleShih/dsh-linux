@@ -2,6 +2,8 @@ import type { AfterPackContext, BeforePackContext } from 'app-builder-lib'
 
 /** Electron-builder fields asserted by the Desktop release tests. */
 export interface DesktopElectronBuilderConfig {
+  readonly productName: string
+  readonly linux: { readonly executableName: string; readonly target: readonly string[]; readonly desktop: { readonly entry: { readonly StartupWMClass: string } } }
   readonly appId: string
   readonly artifactName: string
   readonly protocols: readonly [{ readonly name: 'DeepSeek Harness'; readonly schemes: readonly ['dsh'] }]

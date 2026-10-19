@@ -1,6 +1,12 @@
-# DeepSeek Harness
+# DSH Linux
 
 English | [中文](README.zh.md)
+
+DSH Linux is a community Linux desktop fork of DeepSeek Harness, with KDE Plasma as its first validation target. It is not an official DeepSeek release.
+
+[Linux development and validation](apps/desktop/linux/README.md)
+
+## Upstream project
 
 DeepSeek Harness (`dsh`) is an open-source agent harness developed by [DeepSeek AI](https://deepseek.com).
 
