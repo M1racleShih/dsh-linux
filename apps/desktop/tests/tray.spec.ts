@@ -70,3 +70,13 @@ it('relabels the menu in the current locale and ignores relabel after disposal',
   f.tray.relabel()
   expect(native.menus).toHaveLength(2)
 })
+
+it('uses the distribution name with the localized Linux menu actions', () => {
+  const open = vi.fn()
+  const quit = vi.fn()
+  const tray = new DesktopTray({ iconPath: '/app/icon.png', productName: 'DSH Linux',
+    locale: () => resolveDesktopLocale('zh'), open, quit })
+  expect(native.trays[0]!.setToolTip).toHaveBeenCalledWith('DSH Linux')
+  expect(labels(native.menus[0]!)).toEqual(['打开 DSH Linux', 'separator', '退出 DSH Linux'])
+  tray.dispose()
+})

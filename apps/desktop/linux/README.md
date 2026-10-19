@@ -13,6 +13,7 @@ DSH Linux adapts the upstream Electron desktop to Linux x64. The application kee
 ## Table of Contents
 
 - [Identity and data](#identity-and-data)
+- [Local desktop shortcut](#local-desktop-shortcut)
 - [Source validation](#source-validation)
 - [Distribution scope](#distribution-scope)
 - [Dev Note](#dev-note)
@@ -22,6 +23,16 @@ DSH Linux adapts the upstream Electron desktop to Linux x64. The application kee
 The Linux package configuration uses the name `DSH Linux`, executable `dsh-linux`, and application identifier `io.github.m1racleshih.dshlinux`. The packaged application and its CLI default to `~/.dsh-linux`; an explicit `DSH_HOME` takes precedence. Development runs use the existing disposable directory under `apps/desktop/.desktop-build/development`. Electron configuration belongs to the application's own user-data directory.
 
 The fork preserves the upstream MIT license, attribution, interface, and artwork. DeepSeek names and artwork identify upstream work; they do not imply endorsement. See the [brand guidelines](../../../BRAND_GUIDELINES.md) and [license](../../../LICENSE).
+
+## Local desktop shortcut
+
+After building the source, run `pnpm run install:desktop:linux` from the repository root. This prepares the runtime and installs DSH Linux into the current user's application menu and Desktop directory. It does not create an installer or enable login autostart. Keep the source checkout and its dependencies in place; rebuild after source updates and rerun installation after moving the checkout.
+
+Double-click DSH Linux on the desktop to open it. Closing the workspace window hides it while tasks continue. The KDE system tray retains the application icon: activate it to restore the window, or right-click and choose Quit DSH Linux to stop the application and its backend. Active tasks or scheduled reminders can require quit confirmation. KDE may place the icon in the tray's hidden-items area.
+
+The shortcut uses `~/.dsh-linux` for persistent Harness data unless `DSH_HOME` is set. Electron data uses `${XDG_CONFIG_HOME:-~/.config}/dsh-linux`; launch logs use `${XDG_STATE_HOME:-~/.local/state}/dsh-linux/desktop.log`. It starts the built application without a terminal or debugger. The ordinary development launcher retains its disposable data directory.
+
+Source shortcut startup, workspace close-to-hide, tray restore, and tray quit with backend cleanup have been checked on KDE/X11. Full desktop acceptance and installer qualification remain separate.
 
 ## Source validation
 

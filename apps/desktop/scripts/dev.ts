@@ -91,7 +91,7 @@ async function launchElectron(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  const { values } = parseArgs({ options: { 'skip-build': { type: 'boolean', default: false } } })
+  const { values } = parseArgs({ options: { 'skip-build': { type: 'boolean', default: false }, 'prepare-only': { type: 'boolean', default: false } } })
   if (!values['skip-build']) {
     await runPackageScript('build:artifacts', REPOSITORY_ROOT)
     await runPackageScript('build', APP_ROOT)
@@ -121,7 +121,7 @@ async function main(): Promise<void> {
     target: resolveDesktopBuildTarget(),
   })
   await preparePrimaryRuntime()
-  await launchElectron()
+  if (!values['prepare-only']) await launchElectron()
 }
 
 await main().catch((error: unknown) => {

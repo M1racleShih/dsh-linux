@@ -108,7 +108,7 @@ export function createElectronBuilderConfig(
     appId,
     protocols: [{ name: 'DeepSeek Harness', schemes: ['dsh'] }],
     extraMetadata: {
-      ...(packagesLinux ? { name: 'dsh-linux', description: 'Community Linux desktop distribution of DeepSeek Harness',
+      ...(packagesLinux ? { name: 'dsh-linux', desktopName: 'io.github.m1racleshih.dshlinux.desktop', description: 'Community Linux desktop distribution of DeepSeek Harness',
         homepage: 'https://github.com/M1racleShih/dsh-linux' } : {}),
       dshDesktopAppId: appId,
       dshDesktopUpdateChannel: update?.channel ?? 'nightly',
@@ -250,11 +250,12 @@ export function createElectronBuilderConfig(
     },
     linux: {
       executableName: 'dsh-linux',
+      syncDesktopName: true,
       category: 'Development',
       icon: fileURLToPath(new URL('../resources/icon-windows.png', import.meta.url)),
       target: ['AppImage', 'deb'],
       maintainer: 'DSH Linux contributors',
-      desktop: { entry: { Name: 'DSH Linux', StartupWMClass: 'dsh-linux',
+      desktop: { entry: { Name: 'DSH Linux', StartupWMClass: 'io.github.m1racleshih.dshlinux',
         Comment: 'Community Linux desktop distribution of DeepSeek Harness' } },
     },
     nsis: {

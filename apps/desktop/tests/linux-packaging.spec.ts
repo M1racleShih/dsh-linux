@@ -25,7 +25,7 @@ it('builds DSH Linux packages without an official update source or policy', () =
   expect(config.extraMetadata).toMatchObject({ name: 'dsh-linux' })
   expect(config.linux.executableName).toBe('dsh-linux')
   expect(config.linux.target).toEqual(['AppImage', 'deb'])
-  expect(config.linux.desktop.entry.StartupWMClass).toBe('dsh-linux')
+  expect(config.linux.desktop.entry.StartupWMClass).toBe('io.github.m1racleshih.dshlinux')
   expect(config.artifactName).toBe('dsh-linux-${version}-${os}-${arch}-unsigned.${ext}')
 })
 

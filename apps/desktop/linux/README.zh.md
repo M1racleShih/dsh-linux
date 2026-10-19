@@ -13,6 +13,7 @@ DSH Linux 将上游 Electron 桌面适配到 Linux x64。应用在 Linux 上保�
 ## 目录
 
 - [标识与数据](#identity-and-data)
+- [本地桌面快捷方式](#local-desktop-shortcut)
 - [源码验证](#source-validation)
 - [分发范围](#distribution-scope)
 - [开发备注](#dev-note)
@@ -24,6 +25,18 @@ DSH Linux 将上游 Electron 桌面适配到 Linux x64。应用在 Linux 上保�
 Linux 打包配置使用名称 `DSH Linux`、可执行文件 `dsh-linux` 和应用标识 `io.github.m1racleshih.dshlinux`。打包后的应用及其 CLI 默认使用 `~/.dsh-linux`，显式设置的 `DSH_HOME` 优先。开发运行沿用 `apps/desktop/.desktop-build/development` 下的临时目录。Electron 配置使用应用独立的用户数据目录。
 
 本分支保留上游 MIT 许可证、署名、界面和图标。DeepSeek 名称和图标用于标识上游成果，不表示官方背书。参见[品牌指南](../../../BRAND_GUIDELINES.zh.md)和[许可证](../../../LICENSE)。
+
+<a id="local-desktop-shortcut"></a>
+
+## 本地桌面快捷方式
+
+编译源码后，在仓库根目录运行 `pnpm run install:desktop:linux`。它准备运行环境，并将 DSH Linux 安装到当前用户的应用菜单和桌面目录，不生成安装包，也不启用登录自启动。请保留源码目录及其依赖；更新源码后重新编译，移动源码目录后重新安装快捷方式。
+
+双击桌面上的 DSH Linux 即可打开。关闭工作区窗口会隐藏界面，任务继续运行。KDE 系统托盘保留应用图标：点击可恢复窗口，右键选择“退出 DSH Linux”会停止应用及其后台。存在运行中任务或定时提醒时，退出可能需要确认。KDE 可能将图标放在托盘的隐藏项目区域。
+
+快捷方式默认使用 `~/.dsh-linux` 保存 Harness 数据，设置 `DSH_HOME` 可覆盖。Electron 数据位于 `${XDG_CONFIG_HOME:-~/.config}/dsh-linux`，启动日志位于 `${XDG_STATE_HOME:-~/.local/state}/dsh-linux/desktop.log`。它直接启动编译后的应用，不打开终端或调试器。普通开发启动器仍使用临时数据目录。
+
+源码快捷方式启动、关闭工作区后隐藏、托盘恢复以及托盘退出时清理后台，均已在 KDE/X11 验证。完整桌面验收和安装包验收仍需单独完成。
 
 <a id="source-validation"></a>
 

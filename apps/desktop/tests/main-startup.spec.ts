@@ -159,6 +159,7 @@ const harness = await vi.hoisted(async () => {
     getVersion: () => '1.0.0',
     getAppPath: (): string => 'desktop-test-app',
     setAppLogsPath: vi.fn(),
+    setDesktopName: vi.fn(),
     getPath: vi.fn<(name: string) => string>(),
     setAboutPanelOptions: vi.fn<(options: Electron.AboutPanelOptionsOptions) => void>(),
     requestSingleInstanceLock: () => true,
@@ -1288,6 +1289,31 @@ describe('desktop main startup', () => {
     const relabels = harness.trays[0]!.setContextMenu.mock.calls.length
     harness.ipcOn.mock.calls.find(call => call[0] === DESKTOP_IPC.localeChanged)![1]({ sender: window.webContents, senderFrame: window.webContents.mainFrame }, 'zh')
     expect(harness.trays[0]!.setContextMenu.mock.calls.length).toBe(relabels + 1)
+  })
+
+  it('keeps the Linux Host alive on close, restores from the tray and awaits shutdown on Quit', async () => {
+    vi.spyOn(process, 'platform', 'get').mockReturnValue('linux')
+    const host = await readyWorkspace()
+    const window = harness.windows[0]!
+    const tray = harness.trays[0]!
+    expect(harness.app.setDesktopName).toHaveBeenCalledWith('io.github.m1racleshih.dshlinux.desktop')
+    expect(window.options).toMatchObject({ icon: join('desktop-test-resources', 'icon.png') })
+    expect(tray.image).toEqual({ path: join('desktop-test-resources', 'icon.png') })
+    expect(tray.setToolTip).toHaveBeenCalledWith('DSH Linux')
+    window.show.mockClear()
+    window.close()
+    expect(window.isDestroyed()).toBe(false)
+    expect(window.hide).toHaveBeenCalledOnce()
+    expect(host.stop).not.toHaveBeenCalled()
+    tray.emit('click')
+    expect(window.show).toHaveBeenCalledOnce()
+    const quit = harness.menu.mock.calls.flatMap(call => call[0]).find(item => item.label === 'Quit DSH Linux')!
+    ;(quit.click as () => void)()
+    await vi.advanceTimersByTimeAsync(0)
+    await host.stopping.promise
+    expect(tray.destroy).toHaveBeenCalledOnce()
+    host.exited.resolve()
+    await harness.quitCompleted.promise
   })
 
   it('keeps the workspace visible while acknowledgement is pending and ignores a destroyed window', async () => {
